@@ -1,0 +1,132 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Combine
+
+float mapCount;
+Texture2D<float4> Map_01;float4 Map_01_TexelSize; Texture2D<float4> Map2_01;float4 Map2_01_TexelSize; Texture2D<float4> Map3_01;float4 Map3_01_TexelSize;
+Texture2D<float4> Map_02;float4 Map_02_TexelSize; Texture2D<float4> Map2_02;float4 Map2_02_TexelSize; Texture2D<float4> Map3_02;float4 Map3_02_TexelSize;
+Texture2D<float4> Map_03;float4 Map_03_TexelSize; Texture2D<float4> Map2_03;float4 Map2_03_TexelSize; Texture2D<float4> Map3_03;float4 Map3_03_TexelSize;
+Texture2D<float4> Map_04;float4 Map_04_TexelSize; Texture2D<float4> Map2_04;float4 Map2_04_TexelSize; Texture2D<float4> Map3_04;float4 Map3_04_TexelSize;
+Texture2D<float4> Map_05;float4 Map_05_TexelSize; Texture2D<float4> Map2_05;float4 Map2_05_TexelSize; Texture2D<float4> Map3_05;float4 Map3_05_TexelSize;
+Texture2D<float4> Map_06;float4 Map_06_TexelSize; Texture2D<float4> Map2_06;float4 Map2_06_TexelSize; Texture2D<float4> Map3_06;float4 Map3_06_TexelSize;
+Texture2D<float4> Map_07;float4 Map_07_TexelSize; Texture2D<float4> Map2_07;float4 Map2_07_TexelSize; Texture2D<float4> Map3_07;float4 Map3_07_TexelSize;
+Texture2D<float4> Map_08;float4 Map_08_TexelSize; Texture2D<float4> Map2_08;float4 Map2_08_TexelSize; Texture2D<float4> Map3_08;float4 Map3_08_TexelSize;
+Texture2D<float4> Map_09;float4 Map_09_TexelSize; Texture2D<float4> Map2_09;float4 Map2_09_TexelSize; Texture2D<float4> Map3_09;float4 Map3_09_TexelSize;
+Texture2D<float4> Map_10;float4 Map_10_TexelSize; Texture2D<float4> Map2_10;float4 Map2_10_TexelSize; Texture2D<float4> Map3_10;float4 Map3_10_TexelSize;
+Texture2D<float4> Map_11;float4 Map_11_TexelSize; Texture2D<float4> Map2_11;float4 Map2_11_TexelSize; Texture2D<float4> Map3_11;float4 Map3_11_TexelSize;
+Texture2D<float4> Map_12;float4 Map_12_TexelSize; Texture2D<float4> Map2_12;float4 Map2_12_TexelSize; Texture2D<float4> Map3_12;float4 Map3_12_TexelSize;
+Texture2D<float4> Map_13;float4 Map_13_TexelSize; Texture2D<float4> Map2_13;float4 Map2_13_TexelSize; Texture2D<float4> Map3_13;float4 Map3_13_TexelSize;
+Texture2D<float4> Map_14;float4 Map_14_TexelSize; Texture2D<float4> Map2_14;float4 Map2_14_TexelSize; Texture2D<float4> Map3_14;float4 Map3_14_TexelSize;
+Texture2D<float4> Map_15;float4 Map_15_TexelSize; Texture2D<float4> Map2_15;float4 Map2_15_TexelSize; Texture2D<float4> Map3_15;float4 Map3_15_TexelSize;
+Texture2D<float4> Map_16;float4 Map_16_TexelSize; Texture2D<float4> Map2_16;float4 Map2_16_TexelSize; Texture2D<float4> Map3_16;float4 Map3_16_TexelSize;
+
+
+
+Texture2D<float4>whitemask;float4 white_texelsize;
+RWTexture2D<float4> outputTexture; float2 CombineTexelSize;
+float2 _tiling;
+
+
+
+
+
+float4 settexture(uint3 id, Texture2D < float4 > map,float mapCount, float2 _tiling, float4 texelSize, float2 uv)
+{
+    float4 result = float4(0, 0, 0, 0);
+    float2 scaleFilter = CombineTexelSize / texelSize;
+    float2 ID; float2 rect;float Mask;
+    
+    
+    //改位置
+    uv = (id.xy / CombineTexelSize.xy)*_tiling-texelSize.zw;
+    ID = uv * texelSize;
+    result = map[ID];
+     
+      
+   float4 white=float4(0,0,0,0);
+   float2  whiteuv = (id.xy / CombineTexelSize.xy)*_tiling-white_texelsize.zw;
+   float2 whiteID = whiteuv * white_texelsize;
+    white = whitemask[whiteID];
+    
+   Mask =1-smoothstep(1.0,1.0, max(abs(uv.x-1),abs(uv.y-1)));
+
+    float4 picture = result *Mask;
+    float4 Box=lerp(white,picture,Mask);
+    result=Box;
+    
+    
+   
+  return result;
+}
+
+
+[numthreads(16, 16, 1)]
+void Combine(uint3 id: SV_DispatchThreadID)
+{
+    
+    float4 result = float4(0, 0, 0, 0);
+    float2 uv = (id.xy / CombineTexelSize);
+ 
+
+    
+    if (mapCount >= 01.)result += settexture(id,Map_01, mapCount, _tiling, Map_01_TexelSize,uv);
+    if(mapCount >= 02.)result += settexture(id, Map_02, mapCount, _tiling,  Map_02_TexelSize, uv);
+    if(mapCount >= 03.)result += settexture(id, Map_03, mapCount, _tiling,  Map_03_TexelSize, uv);
+    if(mapCount >= 04.)result += settexture(id, Map_04, mapCount, _tiling, Map_04_TexelSize,uv);
+    if(mapCount >= 05.)result += settexture(id, Map_05, mapCount, _tiling, Map_05_TexelSize, uv);
+    if(mapCount >= 06.)result += settexture(id, Map_06, mapCount, _tiling,  Map_06_TexelSize, uv);
+    if(mapCount >= 07.)result += settexture(id, Map_07, mapCount, _tiling, Map_07_TexelSize, uv);
+    if(mapCount >= 08.)result += settexture(id, Map_08, mapCount, _tiling,  Map_08_TexelSize, uv);
+    if(mapCount >= 09.)result += settexture(id, Map_09, mapCount, _tiling,  Map_09_TexelSize, uv);
+    if(mapCount >= 10.)result += settexture(id, Map_10, mapCount, _tiling, Map_10_TexelSize, uv);
+    if(mapCount >= 11.)result += settexture(id, Map_11, mapCount, _tiling,  Map_11_TexelSize, uv);
+    if(mapCount >= 12.)result += settexture(id, Map_12, mapCount, _tiling, Map_12_TexelSize, uv);
+    if(mapCount >= 13.)result += settexture(id, Map_13, mapCount, _tiling, Map_13_TexelSize, uv);
+    if(mapCount >= 14.)result += settexture(id, Map_14, mapCount, _tiling, Map_14_TexelSize, uv);
+    if(mapCount >= 15.)result += settexture(id, Map_15, mapCount, _tiling, Map_15_TexelSize, uv);
+    if(mapCount >= 16.)result += settexture(id, Map_16, mapCount, _tiling, Map_16_TexelSize, uv);
+
+
+ 
+    if(mapCount >= 17.)result += settexture(id, Map2_01, mapCount, _tiling, Map2_01_TexelSize, uv);
+    if(mapCount >= 18.)result += settexture(id, Map2_02, mapCount, _tiling, Map2_02_TexelSize, uv);
+    if(mapCount >= 19.)result += settexture(id, Map2_03, mapCount, _tiling, Map2_03_TexelSize, uv);
+    if(mapCount >= 20.)result += settexture(id, Map2_04, mapCount, _tiling, Map2_04_TexelSize,uv);
+    if(mapCount >= 21.)result += settexture(id, Map2_05, mapCount, _tiling, Map2_05_TexelSize, uv);
+    if(mapCount >= 22.)result += settexture(id, Map2_06, mapCount, _tiling, Map2_06_TexelSize, uv);
+    if(mapCount >= 23.)result += settexture(id, Map2_07, mapCount, _tiling, Map2_07_TexelSize, uv);
+    if(mapCount >= 24.)result += settexture(id, Map2_08, mapCount, _tiling, Map2_08_TexelSize, uv);
+    if(mapCount >= 25.)result += settexture(id, Map2_09, mapCount, _tiling, Map2_09_TexelSize, uv);
+    if(mapCount >= 26.)result += settexture(id, Map2_10, mapCount, _tiling, Map2_10_TexelSize, uv);
+    if(mapCount >= 27.)result += settexture(id, Map2_11, mapCount, _tiling, Map2_11_TexelSize, uv);
+    if(mapCount >= 28.)result += settexture(id, Map2_12, mapCount, _tiling, Map2_12_TexelSize, uv);
+    if(mapCount >= 29.)result += settexture(id, Map2_13, mapCount, _tiling, Map2_13_TexelSize, uv);
+    if(mapCount >= 30.)result += settexture(id, Map2_14, mapCount, _tiling, Map2_14_TexelSize, uv);
+    if(mapCount >= 31.)result += settexture(id, Map2_15, mapCount, _tiling, Map2_15_TexelSize, uv);
+    if(mapCount >= 32.)result += settexture(id, Map2_16, mapCount, _tiling, Map2_16_TexelSize, uv);
+  
+    if(mapCount >= 33.)result += settexture(id, Map3_01, mapCount, _tiling, Map3_01_TexelSize, uv);
+    if(mapCount >= 34.)result += settexture(id, Map3_02, mapCount, _tiling, Map3_02_TexelSize, uv);
+    if(mapCount >= 35.)result += settexture(id, Map3_03, mapCount, _tiling, Map3_03_TexelSize, uv);
+    if(mapCount >= 36.)result += settexture(id, Map3_04, mapCount, _tiling, Map3_04_TexelSize,uv);
+    if(mapCount >= 37.)result += settexture(id, Map3_05, mapCount, _tiling, Map3_05_TexelSize, uv);
+    if(mapCount >= 38.)result += settexture(id, Map3_06, mapCount, _tiling, Map3_06_TexelSize, uv);
+    if(mapCount >= 39.)result += settexture(id, Map3_07, mapCount, _tiling, Map3_07_TexelSize, uv);
+    if(mapCount >= 40.)result += settexture(id, Map3_08, mapCount, _tiling, Map3_08_TexelSize, uv);
+    if(mapCount >= 41.)result += settexture(id, Map3_09, mapCount, _tiling, Map3_09_TexelSize, uv);
+    if(mapCount >= 42.)result += settexture(id, Map3_10, mapCount, _tiling, Map3_10_TexelSize, uv);
+    if(mapCount >= 43.)result += settexture(id, Map3_11, mapCount, _tiling, Map3_11_TexelSize, uv);
+    if(mapCount >= 44.)result += settexture(id, Map3_12, mapCount, _tiling, Map3_12_TexelSize, uv);
+    if(mapCount >= 45.)result += settexture(id, Map3_13, mapCount, _tiling, Map3_13_TexelSize, uv);
+    if(mapCount >= 46.)result += settexture(id, Map3_14, mapCount, _tiling, Map3_14_TexelSize, uv);
+    if(mapCount >= 47.)result += settexture(id, Map3_15, mapCount, _tiling, Map3_15_TexelSize, uv);
+    if(mapCount >= 48.)result += settexture(id, Map3_16, mapCount, _tiling, Map3_16_TexelSize, uv);
+  
+  
+   outputTexture[id.xy] = result;
+  
+   
+
+ 
+
+
+}

@@ -1,0 +1,21 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CombineMesh
+
+
+int faceMaskUVLength;
+
+float2 faceMask_Offset;
+float2 faceMask_Tiling;
+
+RWStructuredBuffer<float2> faceMaskUV;
+
+[numthreads(8,1,1)]
+void CombineMesh (uint3 id : SV_DispatchThreadID)
+{
+    if(id.x < faceMaskUVLength)
+    {
+       // faceMaskUV[id.x] = faceMaskUV[id.x] * float2((128.0 / 2048.0), (128 / 2048.0)) + float2(0.0, 1-(128.0 / 2048.0));
+	   faceMaskUV[id.x] = faceMaskUV[id.x] * faceMask_Tiling + faceMask_Offset;
+    }
+	
+}
