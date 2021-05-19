@@ -131,7 +131,7 @@ public class HairShadowEditor : EditorWindow
         w.Focus();
         // w.autoRepaintOnSceneChange = true;
         w.FaceMaskBasis = new Mesh();
-        string computepath = "Assets/FaceShadowMaskEditorFolder/";
+      /*  string computepath = "Packages/FaceShadowMaskEditorFolder/";
         DirectoryInfo d = new DirectoryInfo(computepath);
         FileInfo[] computepathfiles = d.GetFiles();
         for (int i = 0; i < computepathfiles.Length; i++)
@@ -157,7 +157,7 @@ public class HairShadowEditor : EditorWindow
        
 
         }
-        string rawImagepath = "Assets/FaceShadowMaskEditorFolder/";
+        string rawImagepath = "Packages/FaceShadowMaskEditorFolder/";
         DirectoryInfo ds = new DirectoryInfo(rawImagepath);
         FileInfo[] rawImagefiles = ds.GetFiles();
         for (int i = 0; i < rawImagefiles.Length; i++)
@@ -172,7 +172,7 @@ public class HairShadowEditor : EditorWindow
 
             }
 
-        }
+        }*/
     }
     public void OnGUI()
     {
@@ -188,7 +188,7 @@ public class HairShadowEditor : EditorWindow
             SerializedProperty a = so.FindProperty("Texturecomputeshader");
             EditorGUILayout.PropertyField(a, true);
             GUI.contentColor = Color.yellow;
-            EditorGUILayout.LabelField("Put「Assets / FaceShadowMaskEditorFolder / CombineAllTexture」computeShader", GUILayout.Height(30));
+            EditorGUILayout.LabelField("Put「 FaceShadowMaskEditorFolder / CombineAllTexture」computeShader", GUILayout.Height(30));
             GUI.contentColor = Color.white;
             
          /*   SerializedProperty b = so.FindProperty("combineAllTexturesList");
@@ -286,7 +286,7 @@ public class HairShadowEditor : EditorWindow
             SerializedProperty e = soo.FindProperty("hairMeshcomputeShader");
             EditorGUILayout.PropertyField(e, true);
             GUI.contentColor = Color.yellow;
-            EditorGUILayout.LabelField("Put 「Assets / FaceShadowMaskEditorFolder /ComibneFaceMesh_computeShader」computeShader", GUILayout.Height(30));
+            EditorGUILayout.LabelField("Put 「 FaceShadowMaskEditorFolder /ComibneFaceMesh_computeShader」computeShader", GUILayout.Height(30));
             GUI.contentColor = Color.white;
             SerializedProperty we = soo.FindProperty("mesh_json_Name");
             EditorGUILayout.PropertyField(we, true);
@@ -371,13 +371,13 @@ public class HairShadowEditor : EditorWindow
     {
         jsonname = HairMesh_json_Name.ToString();
 
-        return Application.dataPath + "/FaceShadowMaskEditorFolder/" + jsonname;
+        return Application.dataPath+"/"  + jsonname;
     }
     string JsonPath02()
     {
         jsonname02 = mesh_json_Name.ToString();
 
-        return Application.dataPath + "/FaceShadowMaskEditorFolder/" + jsonname02;
+        return Application.dataPath + "/" + jsonname02;
     }
     
     public void FindBoyHairTexture()
@@ -608,7 +608,7 @@ public class HairShadowEditor : EditorWindow
 
         Texturecomputeshader.Dispatch(kernel, Mathf.CeilToInt(CombineTexture.width / x), Mathf.CeilToInt(CombineTexture.height / y), Mathf.CeilToInt(z));
         string SaveJsonString = JsonUtility.ToJson(combinedata, true);
-        StreamWriter jsonFile = new StreamWriter(System.IO.Path.Combine(Application.dataPath + "/FaceShadowMaskEditorFolder/", texture_json_name.ToString()));
+        StreamWriter jsonFile = new StreamWriter(System.IO.Path.Combine(Application.dataPath , texture_json_name.ToString()));
         jsonFile.Write(SaveJsonString);
         jsonFile.Close();
         return CombineTexture != null;
@@ -673,7 +673,7 @@ public class HairShadowEditor : EditorWindow
        
 
         string SaveJsonString = JsonUtility.ToJson(newcombinedata, true);
-        StreamWriter jsonFile = new StreamWriter(System.IO.Path.Combine(Application.dataPath + "/FaceShadowMaskEditorFolder/", HairMesh_json_Name.ToString()));
+        StreamWriter jsonFile = new StreamWriter(System.IO.Path.Combine(Application.dataPath, HairMesh_json_Name.ToString()));
         jsonFile.Write(SaveJsonString);
         jsonFile.Close();
         /*  FileInfo fi = new FileInfo(Application.dataPath + "/FaceShadowMaskEditorFolder/");
@@ -683,7 +683,7 @@ public class HairShadowEditor : EditorWindow
       //  float hundredPercent = 1000f;
       //  float amountDone = 0;
       //  EditorUtility.DisplayProgressBar("Savejson", "正在生成json....", amountDone ++ / hundredPercent);
-        EditorUtility.DisplayDialog("SaveJsonComplete","json儲存完成! 儲存位置:"+ Application.dataPath + "/FaceShadowMaskEditorFolder/", "OK");
+        EditorUtility.DisplayDialog("SaveJsonComplete","json儲存完成! 儲存位置:"+ Application.dataPath, "OK");
     }
    
     private void OnEnable()
