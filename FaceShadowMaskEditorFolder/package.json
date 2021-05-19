@@ -5,7 +5,9 @@
     "unity": "2019.4",
     "unityRelease": "1f1",
     "displayName": "faceshadowmaskeditor",
-    
+    "dependencies": {
+      
+    },
     "repository": {
       "type": "git",
       "url": "https://github.com/yoruna10553/faceshadowmaskeditor.git"
@@ -13,6 +15,6 @@
     "author": {
       "name": "yoruna10553",
       "email": "carrie10553@gmail.com",
-      "url": "https://github.com/yoruna10553/faceshadowmaskeditor"
+      "url": "https://github.com/yoruna10553"
     }
  }
