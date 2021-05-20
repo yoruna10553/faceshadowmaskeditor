@@ -1,0 +1,21 @@
+{
+    "name": "FaceShadowEditor",
+    "references": [
+        "GUID:c38fb62397af04c51b143415e1db6d90",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:343deaaf83e0cee4ca978e7df0b80d21"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "LitJSON.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
